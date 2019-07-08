@@ -1,0 +1,84 @@
+<h1>{{ myCourse.title }}</h1>
+
+<img width="100px" [src]="myCourse.image" alt="syhdgfdgd"> 
+
+<div class="text-right">
+    <button (click)="format='list'" class="btn btn-sm mr-1"><i class="fa fa-list"></i></button>
+    <button (click)="format='grid'" class="btn btn-sm"><i class="fa fa-th"></i></button>
+</div>
+
+<input [(ngModel)]="myCourse.title" type="text" class="form-control" placeholder="Your Title">
+<input type="url" [(ngModel)]="myCourse.image" class="form-control" placeholder="Your image">
+<textarea [(ngModel)]="myCourse.description" class="form-control" rows="2" placeholder="Your description"></textarea>
+
+<button *ngIf="editable" (click)="updateCourse()" class="btn btn-warning btn-block">Update course</button>
+<button *ngIf="!editable" (click)="addCourse()" class="btn btn-danger btn-block">Add new course</button>
+
+<ul class="list-group" *ngIf="format=='list'">
+    <li class="list-group-item" [ngClass]="{
+        'list-group-item-warning': o,
+        'list-group-item-success': !o
+    }" *ngFor="let course of courses; index as i, first as f, last as l, odd as o, even as e">
+         
+        <img [src]="course.image" width="100px" alt="">
+        <h2>{{ e }} - {{ o }} - {{ l }} - {{ f }} - {{ i }} - {{ course.id }} - {{ course.title }}</h2>
+        <em>{{ course.description }}</em>
+        <div class="text-left">
+            like: {{ course.vote.like }} - dislike: {{ course.vote.disLike }}
+            <app-votes 
+              [mylike]="course.vote.like" 
+              [mydislike]="course.vote.disLike"
+              (voteChildToParent)="changeCourse($event, course)"
+              >
+            </app-votes>
+        </div>
+        <div class="text-right">
+            <button [ngStyle]="{
+                fontSize: course.active ? '20px' : '15px'
+            }" (click)="powerCourse(course)" class="btn btn-sm mr-1" [ngClass]="{
+                'enabled-course': course.active,
+                'disabled-course': !course.active
+            }">
+                <i class="fa fa-power-off"></i>
+            </button>
+            <button (click)="editCourse(course)" class="btn btn-warning btn-sm mr-1">Edit</button>
+            <button (click)="deleteCourse(course)" class="btn btn-danger btn-sm">Delete</button>
+        </div>
+    </li>
+</ul>
+
+
+<div class="row"  *ngIf="format=='grid'">
+    <div class="col-md-4" *ngFor="let course of courses">
+            <div class="card">
+                    <img class="card-img-top" [src]="course.image" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ course.title }}</h4>
+                        <div class="card-text">
+                            {{ course.description }}
+                            
+                            <div class="my-2">
+                                    <button [ngStyle]="{
+                                        fontSize: course.active ? '20px' : '15px'
+                                    }" (click)="powerCourse(course)" class="btn btn-sm mr-1" [ngClass]="{
+                                        'enabled-course': course.active,
+                                        'disabled-course': !course.active
+                                    }">
+                                        <i class="fa fa-power-off"></i>
+                                    </button>
+                                    <button (click)="editCourse(course)" class="btn btn-warning btn-sm mr-1">Edit</button>
+                                    <button (click)="deleteCourse(course)" class="btn btn-danger btn-sm">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+
+
+
+<p>
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, quisquam.
+</p>
+
+<button class="btn btn-primary">salam</button>
